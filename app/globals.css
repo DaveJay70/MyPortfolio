@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================= */
+/* DEFAULT THEME (PREMIUM DARK)  */
+/* ============================= */
+
+@layer base {
+  :root {
+    /* Background & Text */
+    --background: 260 40% 4%;     /* ultra deep violet-black */
+    --foreground: 0 0% 98%;
+
+    /* Surfaces */
+    --card: 260 30% 6%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 260 30% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Brand / Accent */
+    --primary: 270 80% 60%;       /* vibrant purple */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 10% 12%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 10% 12%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: 320 80% 60%;        /* vibrant pink */
+    --accent-foreground: 0 0% 100%;
+
+    /* Utility */
+    --border: 260 20% 15%;
+    --input: 260 20% 15%;
+    --ring: 270 80% 60%;
+
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ============================= */
+/* GLOBAL BEHAVIOR & UTILITIES   */
+/* ============================= */
+
+html {
+  scroll-behavior: smooth;
+  cursor: none; /* custom cursor */
+}
+
+body {
+  cursor: none;
+  overflow-x: hidden;
+}
+
+a,
+button,
+input,
+textarea {
+  cursor: none;
+}
+
+/* Premium Glassmorphism Utility */
+.glass-panel {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)];
+}
+
+/* ============================= */
+/* ANIMATIONS                    */
+/* ============================= */
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
