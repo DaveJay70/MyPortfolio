@@ -1,246 +1,413 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef, useCallback } from "react";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { ExternalLink, Github, Play, FolderGit2 } from "lucide-react";
+import {
+  ExternalLink,
+  Github,
+  Play,
+  FolderGit2,
+  ArrowUpRight,
+} from "lucide-react";
 
-export default function Projects() {
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+/* ─── Project data ─── */
+const PROJECTS = [
+  {
+    title: "Bau24 – Live Production Platform",
+    description:
+      "Full Stack Developer Intern on Bau24 — a scalable production web platform. Contributed to BauInfo, BauConfigurator, and BauShop modules.",
+    tech: ["Next.js", "React", "Tailwind CSS", "REST APIs", "Deno"],
+    accentRgb: "6,182,212",
+    media: "/bau.png",
+    mediaType: "image",
+    liveUrl: "#contact",
+    sourceUrl: "https://github.com/DaveJay70",
+    category: "Production",
+  },
+  {
+    title: "Unity 2D Endless Runner",
+    description:
+      "Flappy Bird-style 2D game in Unity. Physics-based mechanics, obstacle generation, scoring, UI animations, and ad monetization.",
+    tech: ["Unity", "C#", "Game Physics", "LevelPlay Ads"],
+    accentRgb: "34,197,94",
+    media: "/projects/unity-game.mp4",
+    mediaType: "video",
+    liveUrl: "#contact",
+    sourceUrl: "https://github.com/DaveJay70",
+    category: "Game",
+  },
+  {
+    title: "Online Quiz Management System",
+    description:
+      "Full-stack quiz platform with authentication, result storage, dynamic UI rendering, and SQL Server persistence.",
+    tech: ["React", "ASP.NET Core", "Web API", "SQL Server"],
+    accentRgb: "168,85,247",
+    media: "/projects/quiz.png",
+    mediaType: "image",
+    liveUrl: "#contact",
+    sourceUrl: "https://github.com/DaveJay70",
+    category: "Full-stack",
+  },
+  {
+    title: "Online Food Ordering System",
+    description:
+      "MERN-stack food ordering app with secure auth, RESTful APIs, cart functionality, and order management.",
+    tech: ["MongoDB", "Express.js", "React.js", "Node.js"],
+    accentRgb: "236,72,153",
+    media: "/projects/food-ordering.png",
+    mediaType: "image",
+    liveUrl: "#contact",
+    sourceUrl: "https://github.com/DaveJay70",
+    category: "Full-stack",
+  },
+];
 
-  const projects = [
-    {
-      title: "Bau24 – Live Production Web Platform",
-      description:
-        "Working as a Full Stack Developer Intern on Bau24, a scalable production-level web platform. Contributing to multiple core modules including BauInfo, BauConfigurator, and BauShop.",
-      tech: ["Next.js", "React", "Tailwind CSS", "REST APIs", "Deno"],
-      gradient: "from-cyan-500 to-blue-500",
-      accentColor: "#06b6d4",
-      accentText: "rgb(103 232 249)",
-      accentBorder: "rgba(6,182,212,0.3)",
-      accentBg: "rgba(6,182,212,0.05)",
-      media: "/bau.png",
-      mediaType: "image",
-      liveUrl: "#",
-      sourceUrl: "#",
-    },
-    {
-      title: "Unity 2D Game – Endless Runner",
-      description:
-        "Developing a Flappy Bird-style 2D endless runner game in Unity. Implemented physics-based mechanics, obstacle generation, scoring logic, UI animations, and ad monetization.",
-      tech: ["Unity", "C#", "Game Physics", "LevelPlay Ads"],
-      gradient: "from-green-500 to-emerald-500",
-      accentColor: "#22c55e",
-      accentText: "rgb(134 239 172)",
-      accentBorder: "rgba(34,197,94,0.3)",
-      accentBg: "rgba(34,197,94,0.05)",
-      media: "/projects/unity-game.mp4",
-      mediaType: "video",
-      liveUrl: "#",
-      sourceUrl: "#",
-    },
-    {
-      title: "Online Quiz Management System",
-      description:
-        "Full-stack quiz platform featuring authentication, result storage, dynamic UI rendering, and database persistence.",
-      tech: ["React", "ASP.NET Core", "Web API", "SQL Server"],
-      gradient: "from-purple-500 to-pink-500",
-      accentColor: "#a855f7",
-      accentText: "rgb(216 180 254)",
-      accentBorder: "rgba(168,85,247,0.3)",
-      accentBg: "rgba(168,85,247,0.05)",
-      media: "/projects/quiz.png",
-      mediaType: "image",
-      liveUrl: "#",
-      sourceUrl: "#",
-    },
-    {
-      title: "Online Food Ordering System",
-      description:
-        "Full-stack MERN application with secure authentication, RESTful APIs, cart functionality, and order management system.",
-      tech: ["MongoDB", "Express.js", "React.js", "Node.js"],
-      gradient: "from-pink-500 to-red-500",
-      accentColor: "#ec4899",
-      accentText: "rgb(249 168 212)",
-      accentBorder: "rgba(236,72,153,0.3)",
-      accentBg: "rgba(236,72,153,0.05)",
-      media: "/projects/food-ordering.png",
-      mediaType: "image",
-      liveUrl: "#",
-      sourceUrl: "#",
-    },
-  ];
+function MediaThumb({ project }) {
+  const [error, setError] = useState(false);
+  const [playing, setPlaying] = useState(false);
+
+  if (project.mediaType === "video") {
+    return (
+      <>
+        <video
+          src={project.media}
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-[1.05]"
+          muted
+          loop
+          playsInline
+          onMouseEnter={(e) => {
+            e.currentTarget.play();
+            setPlaying(true);
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.pause();
+            e.currentTarget.currentTime = 0;
+            setPlaying(false);
+          }}
+        />
+        {!playing && (
+          <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
+            <div
+              className="rounded-full p-3 backdrop-blur-md"
+              style={{
+                background: "rgba(0,0,0,0.5)",
+                border: "1px solid rgba(255,255,255,0.2)",
+              }}
+            >
+              <Play className="h-5 w-5 fill-white text-white" />
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <div
+        className="flex h-full w-full flex-col items-center justify-center gap-2"
+        style={{
+          background: `linear-gradient(135deg, rgba(${project.accentRgb},0.15), rgba(${project.accentRgb},0.04))`,
+        }}
+      >
+        <FolderGit2
+          className="h-10 w-10"
+          style={{ color: `rgba(${project.accentRgb},0.45)` }}
+        />
+        <span
+          className="text-xs"
+          style={{ color: `rgba(${project.accentRgb},0.35)` }}
+        >
+          No preview
+        </span>
+      </div>
+    );
+  }
 
   return (
-    <section id="projects" className="py-32 relative" ref={ref}>
-      <div className="absolute left-[5%] top-[50%] w-[500px] h-[500px] bg-pink-600/10 rounded-full blur-[120px] -z-10 pointer-events-none" />
-      <div className="absolute right-[10%] top-[20%] w-[300px] h-[300px] bg-cyan-600/[0.08] rounded-full blur-[100px] -z-10 pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
-        >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
-            Featured{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">
-              Projects
-            </span>
-          </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-pink-500 to-purple-500 mx-auto rounded-full" />
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-10">
-          {projects.map((project, index) => (
-            <ProjectCard key={index} project={project} index={index} inView={inView} />
-          ))}
-        </div>
-      </div>
-    </section>
+    <img
+      src={project.media}
+      alt={project.title}
+      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-[1.05]"
+      onError={() => setError(true)}
+    />
   );
 }
 
-function ProjectCard({ project, index, inView }) {
-  const [imgError, setImgError] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+function externalLinkProps(url) {
+  return /^https?:\/\//i.test(url)
+    ? { target: "_blank", rel: "noopener noreferrer" }
+    : {};
+}
+
+function ProjectActions({ project }) {
+  return (
+    <div className="flex flex-wrap items-center gap-2 pt-1 sm:flex-nowrap">
+      <a
+        href={project.sourceUrl}
+        {...externalLinkProps(project.sourceUrl)}
+        className="flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-xs font-semibold text-zinc-400 transition-colors hover:border-white/20 hover:bg-white/[0.08] hover:text-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400/60"
+      >
+        <Github className="h-3.5 w-3.5 shrink-0" />
+        Source
+      </a>
+      <a
+        href={project.liveUrl}
+        {...externalLinkProps(project.liveUrl)}
+        className="flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-xs font-bold text-white shadow-lg transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/40"
+        style={{
+          background: `linear-gradient(135deg, rgb(${project.accentRgb}), rgba(${project.accentRgb},0.75))`,
+          boxShadow: `0 8px 28px rgba(${project.accentRgb},0.35)`,
+        }}
+      >
+        <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+        Live demo
+      </a>
+    </div>
+  );
+}
+
+/* ─── 3D tilt + spotlight card (always vertical: media → content) ─── */
+function TiltCard({ project, index, inView }) {
+  const wrapRef = useRef(null);
+  const innerRef = useRef(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [5, -5]), {
+    stiffness: 260,
+    damping: 22,
+  });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-5, 5]), {
+    stiffness: 260,
+    damping: 22,
+  });
+
+  const handleMouseMove = useCallback(
+    (e) => {
+      const rect = wrapRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      x.set((e.clientX - rect.left) / rect.width - 0.5);
+      y.set((e.clientY - rect.top) / rect.height - 0.5);
+
+      const inner = innerRef.current;
+      if (!inner) return;
+      const ix = ((e.clientX - rect.left) / rect.width) * 100;
+      const iy = ((e.clientY - rect.top) / rect.height) * 100;
+      inner.style.setProperty("--spot-x", `${ix}%`);
+      inner.style.setProperty("--spot-y", `${iy}%`);
+    },
+    [x, y]
+  );
+
+  const resetMouse = useCallback(() => {
+    x.set(0);
+    y.set(0);
+    innerRef.current?.style.removeProperty("--spot-x");
+    innerRef.current?.style.removeProperty("--spot-y");
+  }, [x, y]);
+
+  const thumbBlock = (
+    <div className="card-thumb relative h-[200px] w-full flex-shrink-0 overflow-hidden bg-[#07070d] sm:h-[220px]">
+      <MediaThumb project={project} />
+      <div
+        className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-tr opacity-0 transition-opacity duration-500 group-hover/card:opacity-100"
+        style={{
+          background: `linear-gradient(135deg, rgba(${project.accentRgb},0.22), transparent 55%)`,
+        }}
+      />
+      <div
+        className="absolute left-0 right-0 top-0 z-20 h-0.5"
+        style={{
+          background: `linear-gradient(90deg, rgba(${project.accentRgb},1), rgba(${project.accentRgb},0.2), transparent 75%)`,
+        }}
+      />
+      <div
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-24 bg-gradient-to-t from-[#0c0c12] to-transparent"
+      />
+      <div
+        className="absolute bottom-3 right-4 z-20 text-[11px] font-bold tabular-nums"
+        style={{ color: `rgba(${project.accentRgb},0.45)` }}
+      >
+        {String(index + 1).padStart(2, "0")}
+      </div>
+    </div>
+  );
+
+  const bodyBlock = (
+    <div className="relative z-10 flex flex-grow flex-col gap-3 p-5 sm:p-6">
+      {project.category && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+            {project.category}
+          </span>
+        </div>
+      )}
+
+      <h3 className="text-base font-bold leading-snug tracking-tight text-white sm:text-lg">
+        {project.title}
+      </h3>
+
+      <p className="flex-grow text-sm leading-relaxed text-zinc-400">
+        {project.description}
+      </p>
+
+      <div className="flex flex-wrap gap-1.5">
+        {project.tech.map((t, i) => (
+          <span
+            key={i}
+            className="rounded-md border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+            style={{
+              background: `rgba(${project.accentRgb},0.08)`,
+              borderColor: `rgba(${project.accentRgb},0.2)`,
+              color: `rgba(${project.accentRgb},0.88)`,
+            }}
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+
+      <div
+        className="h-px w-full"
+        style={{
+          background: `linear-gradient(90deg, rgba(${project.accentRgb},0.35), transparent 72%)`,
+        }}
+      />
+
+      <ProjectActions project={project} />
+    </div>
+  );
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 32 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.65, delay: index * 0.15, ease: "easeOut" }}
-      className="group glass-panel rounded-[2rem] overflow-hidden hover:-translate-y-2 transition-all duration-500 relative flex flex-col h-full shadow-xl"
+      transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      style={{ perspective: 900 }}
     >
-      {/* ── MEDIA THUMBNAIL ── */}
-      <div
-        className="relative w-full h-52 overflow-hidden flex-shrink-0"
-        style={{ backgroundColor: "#0d0d0f" }}
+      <motion.div
+        ref={wrapRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={resetMouse}
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        className="group/card"
       >
-        {/* Gradient hover overlay */}
         <div
-          className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-25 transition-opacity duration-500 z-10`}
-        />
-
-        {project.mediaType === "video" ? (
-          <>
-            <video
-              src={project.media}
-              className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-700"
-              muted
-              loop
-              playsInline
-              onMouseEnter={(e) => {
-                e.currentTarget.play();
-                setIsPlaying(true);
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.pause();
-                e.currentTarget.currentTime = 0;
-                setIsPlaying(false);
-              }}
-            />
-            {!isPlaying && (
-              <div className="absolute inset-0 flex items-center justify-center z-20">
-                <div className="bg-black/50 backdrop-blur-sm rounded-full p-4 border border-white/20">
-                  <Play className="w-8 h-8 text-white fill-white" />
-                </div>
-              </div>
-            )}
-          </>
-        ) : imgError ? (
-          /* Fallback placeholder when image fails */
+          ref={innerRef}
+          className="card-inner relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-[#12121a] to-[#0a0a0f] shadow-[0_4px_40px_rgba(0,0,0,0.35)] transition-[border-color,box-shadow] duration-500 group-hover/card:border-white/[0.12] group-hover/card:shadow-[0_24px_80px_rgba(0,0,0,0.45)]"
+          style={{
+            borderColor: `rgba(${project.accentRgb},0.14)`,
+          }}
+        >
           <div
-            className={`w-full h-full flex flex-col items-center justify-center gap-3 bg-gradient-to-br ${project.gradient} opacity-20`}
-          >
-            <FolderGit2 className="w-14 h-14 text-white/50" />
-            <span className="text-white/40 text-xs font-medium">Preview unavailable</span>
-          </div>
-        ) : (
-          <img
-            src={project.media}
-            alt={project.title}
-            className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-700"
-            onError={() => setImgError(true)}
+            className="pointer-events-none absolute inset-0 z-[1] rounded-2xl opacity-0 transition-opacity duration-500 group-hover/card:opacity-100"
+            style={{
+              background: `radial-gradient(600px circle at var(--spot-x, 50%) var(--spot-y, 40%), rgba(${project.accentRgb},0.14), transparent 45%)`,
+            }}
           />
-        )}
 
-        {/* Bottom gradient fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0d0d0f] to-transparent z-10" />
-      </div>
+          {thumbBlock}
+          {bodyBlock}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
 
-      {/* ── CARD CONTENT ── */}
-      <div className="relative z-10 flex flex-col flex-grow p-8 lg:p-9">
-        <div
-          className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500 pointer-events-none`}
-        />
+export default function Projects() {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.06 });
 
-        <h3 className="text-xl font-bold text-white mb-3 leading-tight">
-          {project.title}
-        </h3>
+  return (
+    <section
+      id="projects"
+      className="relative overflow-hidden py-28 sm:py-32"
+      ref={ref}
+    >
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.35]"
+        style={{
+          backgroundImage: `radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)`,
+          backgroundSize: "28px 28px",
+          maskImage:
+            "radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 70%)",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute left-[4%] top-[22%] -z-10 h-[480px] w-[480px] rounded-full blur-[140px]"
+        style={{ background: "rgba(139,92,246,0.07)" }}
+      />
+      <div
+        className="pointer-events-none absolute bottom-[12%] right-[3%] -z-10 h-[420px] w-[420px] rounded-full blur-[120px]"
+        style={{ background: "rgba(6,182,212,0.06)" }}
+      />
 
-        <p className="text-gray-400 mb-6 leading-relaxed text-sm flex-grow">
-          {project.description}
-        </p>
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 22 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-14 text-center sm:mb-16"
+        >
+          <span className="portfolio-eyebrow mx-auto">Selected work</span>
 
-        {/* Tech Badges — using inline style to avoid Tailwind dynamic class purge */}
-        <div className="flex flex-wrap gap-2 mb-7">
-          {project.tech.map((tech, techIndex) => (
-            <motion.span
-              key={techIndex}
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={inView ? { opacity: 1, scale: 1 } : {}}
-              transition={{
-                duration: 0.4,
-                delay: index * 0.15 + techIndex * 0.06 + 0.3,
-              }}
-              style={{
-                border: `1px solid ${project.accentBorder}`,
-                backgroundColor: project.accentBg,
-                color: project.accentText,
-              }}
-              className="px-3 py-1 font-medium text-xs tracking-wide rounded-md"
-            >
-              {tech}
-            </motion.span>
+          <h2
+            className="mb-4 font-extrabold tracking-tight text-white"
+            style={{ fontSize: "clamp(2rem, 4.5vw, 3.25rem)" }}
+          >
+            Projects that{" "}
+            <span className="portfolio-gradient-text">ship & scale</span>
+          </h2>
+
+          <div className="portfolio-divider mb-5">
+            <div className="portfolio-divider-line bg-gradient-to-r from-transparent to-cyan-500/50" />
+            <div className="h-1.5 w-1.5 rounded-full bg-gradient-to-br from-cyan-400 via-violet-400 to-pink-400" />
+            <div className="portfolio-divider-line bg-gradient-to-l from-transparent to-pink-500/50" />
+          </div>
+
+          <p className="mx-auto max-w-lg text-sm leading-relaxed text-zinc-400 sm:text-base">
+            Production platforms, full-stack apps, and interactive experiences —
+            crafted for clarity, performance, and a polished feel.
+          </p>
+
+          <div className="mx-auto mt-8 flex max-w-md flex-wrap items-center justify-center gap-3 text-xs text-zinc-500">
+            <span className="rounded-lg border border-white/5 bg-white/[0.03] px-3 py-1.5 tabular-nums">
+              {PROJECTS.length} highlights
+            </span>
+            <span className="hidden sm:inline text-zinc-600">·</span>
+            <span className="text-zinc-500">Hover cards for depth & spotlight</span>
+          </div>
+        </motion.div>
+
+        <div className="grid gap-6 md:grid-cols-2 md:gap-7">
+          {PROJECTS.map((p, i) => (
+            <TiltCard key={p.title} project={p} index={i} inView={inView} />
           ))}
         </div>
 
-        {/* Buttons — using inline style to avoid Tailwind dynamic class purge */}
-        <div className="flex gap-4 mt-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.55, ease: "easeOut" }}
+          className="mt-14 flex justify-center sm:mt-16"
+        >
           <a
-            href={project.sourceUrl}
+            href="https://github.com/DaveJay70"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              border: `1px solid ${project.accentBorder}`,
-              color: project.accentText,
-            }}
-            className="group/btn px-6 py-2.5 rounded-xl hover:opacity-80 transition-all duration-300 flex items-center justify-center gap-2 flex-1 font-semibold text-sm"
+            className="group inline-flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-3.5 text-sm font-semibold text-zinc-300 backdrop-blur-sm transition-all hover:border-violet-500/30 hover:bg-violet-500/[0.07] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400/50"
           >
-            <Github className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-            <span>Source</span>
+            <Github className="h-4 w-4 text-zinc-400 transition-colors group-hover:text-violet-300" />
+            More on GitHub
+            <ArrowUpRight className="h-4 w-4 text-zinc-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-violet-300" />
           </a>
-
-          <a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              backgroundColor: project.accentColor,
-              boxShadow: `0 8px 20px ${project.accentColor}40`,
-            }}
-            className="group/btn px-6 py-2.5 rounded-xl text-white hover:opacity-90 hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2 flex-1 font-semibold text-sm"
-          >
-            <ExternalLink className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
-            <span>Live App</span>
-          </a>
-        </div>
+        </motion.div>
       </div>
-    </motion.div>
+    </section>
   );
 }

@@ -1,176 +1,89 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 const links = [
-  { name: 'Home', id: 'home' },
-  { name: 'About', id: 'about' },
-  { name: 'Projects', id: 'projects' },
-  { name: 'Contact', id: 'contact' },
+  { name: "Home", id: "home" },
+  { name: "About", id: "about" },
+  { name: "Skills", id: "skills" },
+  { name: "Projects", id: "projects" },
+  { name: "Experience", id: "experience" },
+  { name: "Education", id: "education" },
+  { name: "Contact", id: "contact" },
 ];
 
 function Navbar() {
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    <header className="fixed left-0 right-0 top-0 z-50 w-full border-b border-white/[0.08] bg-[hsl(260_42%_5%/0.92)] shadow-[0_4px_24px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+      {/* Top Accent */}
+      <div className="pointer-events-none h-[2px] w-full bg-gradient-to-r from-cyan-400/80 via-violet-400 to-pink-400/80" />
 
-        .jnav {
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          position: fixed;
-          top: 0; left: 0; right: 0;
-          z-index: 50;
-          background: rgba(10, 0, 20, 0.6);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-bottom: 1px solid rgba(167, 139, 250, 0.12);
-          box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-        }
+      <nav className="relative mx-auto flex w-full items-center gap-2 overflow-hidden px-3 py-2.5 sm:px-5 sm:py-3 lg:px-8">
+        {/* Background Glows */}
+        <div className="pointer-events-none absolute -left-20 top-1/2 h-36 w-36 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-3xl" />
+        <div className="pointer-events-none absolute -right-20 top-1/2 h-40 w-40 -translate-y-1/2 rounded-full bg-violet-500/10 blur-3xl" />
 
-        .jnav-inner {
-          max-width: 80rem;
-          margin: 0 auto;
-          padding: 0 1.5rem;
-          height: 66px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-
-        /* ── Logo ── */
-        .jlogo {
-          display: flex;
-          align-items: center;
-          text-decoration: none;
-          gap: 8px;
-        }
-        .jlogo-bracket {
-          font-family: monospace;
-          font-size: 0.7rem;
-          color: rgba(167,139,250,0.4);
-          line-height: 1;
-        }
-        .jlogo-name {
-          font-size: 1.15rem;
-          font-weight: 800;
-          color: #fff;
-          letter-spacing: -0.03em;
-        }
-        .jlogo-dot {
-          font-size: 1.6rem;
-          font-weight: 900;
-          line-height: 1;
-          background: linear-gradient(135deg, #a78bfa, #f472b6);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-
-        /* ── Nav links ── */
-        .jlinks {
-          display: flex;
-          align-items: center;
-          gap: 2px;
-          list-style: none;
-          margin: 0;
-          padding: 0;
-        }
-        .jlink {
-          position: relative;
-          text-decoration: none;
-          font-size: 0.875rem;
-          font-weight: 500;
-          color: rgba(156, 163, 175, 1);
-          padding: 7px 16px;
-          border-radius: 999px;
-          letter-spacing: 0.01em;
-          transition: color 0.2s ease, background 0.2s ease;
-          display: block;
-        }
-        .jlink:hover {
-          color: #fff;
-          background: rgba(167, 139, 250, 0.1);
-        }
-        .jlink::after {
-          content: '';
-          position: absolute;
-          bottom: 4px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 0;
-          height: 2px;
-          border-radius: 999px;
-          background: linear-gradient(90deg, #a78bfa, #f472b6);
-          transition: width 0.3s ease;
-        }
-        .jlink:hover::after {
-          width: calc(100% - 32px);
-        }
-
-        /* ── Hire Me button ── */
-        @keyframes jshimmer {
-          0%   { background-position: 200% center; }
-          100% { background-position: -200% center; }
-        }
-        .jhire {
-          text-decoration: none;
-          display: inline-block;
-          padding: 8px 20px;
-          border-radius: 999px;
-          font-size: 0.8rem;
-          font-weight: 700;
-          color: #fff;
-          letter-spacing: 0.03em;
-          background: linear-gradient(135deg, #7c3aed, #ec4899, #7c3aed);
-          background-size: 200% auto;
-          animation: jshimmer 4s linear infinite;
-          border: none;
-          cursor: pointer;
-          transition: box-shadow 0.3s ease, transform 0.2s ease;
-          font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .jhire:hover {
-          box-shadow: 0 0 24px rgba(124,58,237,0.55), 0 0 48px rgba(236,72,153,0.18);
-          transform: translateY(-1px);
-          color: #fff;
-          text-decoration: none;
-        }
-
-        /* ── Responsive ── */
-        @media (max-width: 767px) {
-          .jlinks  { display: none; }
-          .jhire   { display: none; }
-        }
-      `}</style>
-
-      <nav className="jnav">
-        <div className="jnav-inner">
-
+        <div className="relative z-10 flex w-full min-w-0 items-center gap-3">
           {/* Logo */}
-          <a href="#home" className="jlogo">
-            <img src="/logo.png" alt="J" style={{ width: 32, height: 32, borderRadius: '8px', objectFit: 'cover' }} />
-            <span className="jlogo-name">Jay</span>
-            <span className="jlogo-dot">.</span>
+          <a
+            href="#home"
+            className="group flex shrink-0 items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1.5 no-underline transition-all duration-300 hover:border-violet-500/35 hover:bg-white/[0.07] hover:shadow-[0_0_20px_rgba(139,92,246,0.18)] sm:px-3 sm:py-2"
+          >
+            <span className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg ring-1 ring-white/10 sm:h-10 sm:w-10">
+              <img
+                src="/logo.png"
+                alt="logo"
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              <span className="absolute inset-0 rounded-lg bg-gradient-to-br from-violet-500/20 to-cyan-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            </span>
+
+            <span className="hidden flex-col leading-tight sm:flex">
+              <span className="text-sm font-bold text-white">Jay Dave</span>
+              <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-violet-300/90">
+                Portfolio
+              </span>
+            </span>
           </a>
 
-          {/* Links */}
-          <ul className="jlinks">
-            {links.map((link) => (
-              <li key={link.id}>
-                <a href={`#${link.id}`} className="jlink">
-                  {link.name}
-                </a>
-              </li>
-            ))}
-          </ul>
+          {/* Menu */}
+          <div className="min-w-0 flex-1 md:flex md:justify-center">
+            <ul className="flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/[0.08] bg-black/30 p-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {links.map((link) => (
+                <li key={link.id} className="shrink-0">
+                  <a
+                    href={`#${link.id}`}
+                    className="group relative block overflow-hidden rounded-full px-3 py-2 text-xs font-medium text-zinc-400 no-underline transition-all duration-300 hover:text-white md:px-4"
+                  >
+                    {/* Modern Hover Background */}
+                    <span className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 via-violet-500/20 to-pink-500/20 opacity-0 blur-md transition-all duration-300 group-hover:opacity-100" />
+
+                    {/* Glass Layer */}
+                    <span className="absolute inset-0 rounded-full border border-transparent bg-white/[0.03] opacity-0 transition-all duration-300 group-hover:border-white/10 group-hover:opacity-100" />
+
+                    {/* Animated Underline */}
+                    <span className="absolute bottom-1 left-1/2 h-[2px] w-0 -translate-x-1/2 rounded-full bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-400 transition-all duration-300 group-hover:w-8" />
+
+                    {/* Text */}
+                    <span className="relative z-10">{link.name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           {/* CTA */}
-          <a href="#contact" className="jhire">
-            Hire Me ✦
+          <a
+            href="#contact"
+            className="relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-violet-600 via-fuchsia-500 to-cyan-500 bg-[length:200%_auto] px-4 py-2 text-xs font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_4px_16px_rgba(124,58,237,0.3)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_22px_rgba(124,58,237,0.4)] sm:px-5 sm:py-2.5"
+          >
+            <span className="relative z-10 flex items-center gap-1.5">
+              Hire Me ✦
+            </span>
           </a>
-
         </div>
       </nav>
-    </>
+    </header>
   );
 }
 

@@ -14,12 +14,13 @@ export default function Home() {
   const { scrollYProgress } = useScroll();
 
   return (
-    <main className="bg-black min-h-screen text-white overflow-x-hidden">
+    <main className="min-h-screen bg-background text-foreground">
       <CustomCursor />
 
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 z-50 origin-left"
+        className="pointer-events-none fixed left-0 right-0 top-0 z-40 h-1 origin-left bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500"
         style={{ scaleX: scrollYProgress }}
+        aria-hidden
       />
 
       <Hero />
@@ -30,8 +31,8 @@ export default function Home() {
       <Education />
       <Contact />
 
-      <footer className="border-t border-gray-800 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
+      <footer className="border-t border-white/10 py-8">
+        <div className="mx-auto max-w-7xl px-4 text-center text-sm text-zinc-500 sm:px-6 lg:px-8">
           <p>&copy; 2025 Jay Dave. All rights reserved.</p>
         </div>
       </footer>

@@ -1,114 +1,169 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { Briefcase, ChevronRight } from 'lucide-react';
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { Briefcase, ChevronRight, Sparkles, CalendarDays } from "lucide-react";
 
 export default function Experience() {
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0.1,
+    threshold: 0.12,
   });
 
   const experiences = [
     {
-      title: 'Web Developer & Game Developer',
-      company: 'Smart Web Company, Jamnagar',
-      period: 'Oct 2025 - Present',
+      title: "Web Developer & Game Developer",
+      company: "Smart Web Company, Jamnagar",
+      period: "Oct 2025 - Present",
       description: [
-        'Working as a Web Developer building modern and responsive web applications',
-        'Handling both frontend and backend development tasks',
-        'Developing 2D games using Unity with optimized performance and smooth gameplay',
+        "Building modern, responsive and scalable web applications.",
+        "Managing frontend and backend development workflows.",
+        "Developing optimized 2D Unity games with smooth gameplay.",
       ],
-      color: 'cyan',
+      glow: "from-cyan-500/20 via-cyan-500/5 to-transparent",
+      border: "border-cyan-500/25",
+      text: "text-cyan-400",
     },
     {
-      title: 'Teaching Assistant - ASP.NET',
-      company: 'Darshan University',
-      period: 'Mar 2025 - Oct 2025',
+      title: "Teaching Assistant - ASP.NET",
+      company: "Darshan University",
+      period: "Mar 2025 - Oct 2025",
       description: [
-        'Working as a Teaching Assistant in the B.Tech program',
-        'Assisting students with ASP.NET concepts and project development',
-        'Guiding students in understanding real-world application architecture',
+        "Supported B.Tech students in ASP.NET development.",
+        "Guided projects with clean architecture practices.",
+        "Helped students understand real-world software workflows.",
       ],
-      color: 'purple',
+      glow: "from-violet-500/20 via-fuchsia-500/10 to-transparent",
+      border: "border-violet-500/25",
+      text: "text-violet-400",
     },
   ];
 
   return (
-    <section id="experience" className="py-32 relative" ref={ref}>
+    <section
+      id="experience"
+      ref={ref}
+      className="relative overflow-hidden py-28 sm:py-32"
+    >
       {/* Background Glow */}
-      <div className="absolute right-[5%] top-[20%] w-[400px] h-[400px] bg-cyan-600/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute right-10 top-20 h-80 w-80 rounded-full bg-cyan-500/10 blur-[140px]" />
+        <div className="absolute bottom-10 left-10 h-80 w-80 rounded-full bg-violet-600/10 blur-[140px]" />
+        <div className="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pink-500/8 blur-[160px]" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          transition={{ duration: 0.7 }}
+          className="mx-auto mb-24 max-w-3xl text-center"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
-            Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">Journey</span>
+          <span className="portfolio-eyebrow mx-auto">
+            <Sparkles className="h-4 w-4 text-violet-300" />
+            Experience
+          </span>
+
+          <h2 className="text-5xl font-bold tracking-tight text-white md:text-7xl">
+            Professional
+            <span className="portfolio-gradient-text"> Journey</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 mx-auto rounded-full" />
+
+          <p className="portfolio-muted mt-6 text-lg leading-relaxed md:text-xl">
+            Real-world experience in development, teamwork, and building
+            impactful digital products.
+          </p>
         </motion.div>
 
-        <div className="relative max-w-4xl mx-auto">
-          {/* Vertical Timeline Line */}
-          <div className="absolute left-0 md:left-1/2 top-4 bottom-4 w-px bg-gradient-to-b from-cyan-500/50 via-purple-500/50 to-transparent md:-translate-x-1/2" />
+        {/* Timeline */}
+        <div className="relative mx-auto max-w-5xl">
+          {/* Center Line */}
+          <div className="absolute left-5 top-0 h-full w-px bg-gradient-to-b from-cyan-500/50 via-violet-500/45 to-pink-500/35 md:left-1/2 md:-translate-x-1/2" />
 
-          {experiences.map((exp, index) => {
-            const isEven = index % 2 === 0;
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className={`relative flex items-center mb-12 md:mb-24 ${isEven ? 'md:justify-start' : 'md:justify-end'}`}
-              >
-                {/* Timeline Dot */}
-                <div className={`absolute left-[-24px] md:left-1/2 w-12 h-12 rounded-full bg-[#0a0014] border-4 border-${exp.color}-500/50 flex items-center justify-center md:-translate-x-1/2 z-20 shadow-[0_0_15px_rgba(0,0,0,0.5)]`}>
-                  <div className={`w-3 h-3 rounded-full bg-${exp.color}-400 shadow-[0_0_10px_currentColor]`} />
-                </div>
+          <div className="space-y-14 md:space-y-20">
+            {experiences.map((exp, index) => {
+              const isLeft = index % 2 === 0;
 
-                {/* Content Card */}
-                <div className={`w-full md:w-[calc(50%-48px)] pl-12 md:pl-0 ${isEven ? 'md:pr-12' : 'md:pl-12'}`}>
-                  <div className={`group glass-panel p-8 rounded-3xl hover:-translate-y-2 hover:shadow-2xl hover:shadow-${exp.color}-900/20 transition-all duration-500 relative overflow-hidden`}>
-
-                    <div className={`absolute inset-0 bg-gradient-to-br from-${exp.color}-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-                    <div className="relative z-10">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className={`p-2.5 rounded-xl bg-${exp.color}-500/10 text-${exp.color}-400 group-hover:scale-110 transition-transform`}>
-                          <Briefcase className="w-6 h-6" />
-                        </div>
-                        <span className={`px-4 py-1.5 rounded-full text-sm font-semibold bg-${exp.color}-500/10 text-${exp.color}-300 border border-${exp.color}-500/20`}>
-                          {exp.period}
-                        </span>
-                      </div>
-
-                      <h4 className="text-2xl font-bold text-white mb-2 leading-tight">
-                        {exp.title}
-                      </h4>
-                      <p className={`text-${exp.color}-400 font-medium text-lg mb-6`}>
-                        {exp.company}
-                      </p>
-
-                      <ul className="space-y-3">
-                        {exp.description.map((desc, i) => (
-                          <li key={i} className="text-gray-400 flex items-start gap-3 group/item">
-                            <ChevronRight className={`w-5 h-5 text-${exp.color}-500/50 mt-0.5 shrink-0 group-hover/item:text-${exp.color}-400 group-hover/item:translate-x-1 transition-all`} />
-                            <span className="leading-relaxed">{desc}</span>
-                          </li>
-                        ))}
-                      </ul>
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 60 }}
+                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.7, delay: index * 0.15 }}
+                  className={`relative flex flex-col md:flex-row ${
+                    isLeft ? "md:flex-row" : "md:flex-row-reverse"
+                  }`}
+                >
+                  {/* Dot */}
+                  <div className="absolute left-5 z-20 -translate-x-1/2 md:left-1/2">
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br ${exp.glow} shadow-xl backdrop-blur-xl`}
+                    >
+                      <Briefcase className={`h-5 w-5 ${exp.text}`} />
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            );
-          })}
+
+                  {/* Card */}
+                  <div
+                    className={`ml-14 md:ml-0 md:w-[calc(50%-3rem)] ${
+                      isLeft ? "md:mr-auto md:pr-8" : "md:ml-auto md:pl-8"
+                    }`}
+                  >
+                    <motion.div
+                      whileHover={{ y: -8 }}
+                      className={`group relative overflow-hidden rounded-3xl border bg-white/[0.03] p-7 backdrop-blur-xl transition-all duration-500 ${exp.border}`}
+                    >
+                      {/* Hover Glow */}
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${exp.glow} opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+                      />
+
+                      <div className="relative z-10">
+                        {/* Period */}
+                        <div className="mb-5 flex flex-wrap gap-3">
+                          <span
+                            className={`inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-semibold ${exp.text}`}
+                          >
+                            <CalendarDays className="h-3.5 w-3.5" />
+                            {exp.period}
+                          </span>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-2xl font-bold leading-tight text-white">
+                          {exp.title}
+                        </h3>
+
+                        {/* Company */}
+                        <p className={`mt-2 text-lg font-medium ${exp.text}`}>
+                          {exp.company}
+                        </p>
+
+                        {/* List */}
+                        <ul className="mt-6 space-y-4">
+                          {exp.description.map((item, i) => (
+                            <li
+                              key={i}
+                              className="group/item flex items-start gap-3 text-zinc-400"
+                            >
+                              <ChevronRight
+                                className={`mt-0.5 h-5 w-5 shrink-0 transition-all duration-300 group-hover/item:translate-x-1 ${exp.text}`}
+                              />
+                              <span className="leading-relaxed">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Corner Glow */}
+                      <div className="absolute -bottom-10 -right-10 h-32 w-32 rounded-full bg-white/5 blur-3xl" />
+                    </motion.div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

@@ -1,153 +1,155 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { Mail, Phone, MapPin, Github, Linkedin, Send } from 'lucide-react';
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Github,
+  Linkedin,
+  ArrowUpRight,
+} from "lucide-react";
 
 export default function Contact() {
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0.1,
+    threshold: 0.15,
   });
 
   const contactInfo = [
     {
       icon: Mail,
-      label: 'Email',
-      value: 'jaydave8305@gmail.com',
-      href: 'mailto:jaydave8305@gmail.com',
-      color: 'cyan',
+      label: "Email",
+      value: "jaydave8305@gmail.com",
+      href: "mailto:jaydave8305@gmail.com",
+      color:
+        "from-cyan-500/20 via-cyan-500/5 to-transparent border-cyan-500/30 text-cyan-400",
     },
     {
       icon: Phone,
-      label: 'Phone',
-      value: '+91 8347083205',
-      href: 'tel:+918347083205',
-      color: 'purple',
+      label: "Phone",
+      value: "+91 8347083205",
+      href: "tel:+918347083205",
+      color:
+        "from-violet-500/20 via-violet-500/5 to-transparent border-violet-500/30 text-violet-400",
     },
     {
       icon: MapPin,
-      label: 'Location',
-      value: 'Jamnagar, Gujarat, India',
-      href: '#',
-      color: 'pink',
+      label: "Location",
+      value: "Jamnagar, Gujarat, India",
+      href: "https://www.google.com/maps/search/?api=1&query=Jamnagar%2C%20Gujarat%2C%20India",
+      color:
+        "from-pink-500/20 via-pink-500/5 to-transparent border-pink-500/30 text-pink-400",
     },
   ];
 
   return (
-    <section id="contact" className="py-32 relative" ref={ref}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      id="contact"
+      ref={ref}
+      className="relative overflow-hidden py-28 sm:py-32"
+    >
+      {/* Background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-20 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-500/10 blur-[120px]" />
+        <div className="absolute bottom-0 right-10 h-80 w-80 rounded-full bg-violet-600/10 blur-[140px]" />
+        <div className="absolute left-0 top-1/2 h-64 w-64 rounded-full bg-pink-500/10 blur-[120px]" />
+      </div>
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          transition={{ duration: 0.7 }}
+          className="mx-auto mb-20 max-w-3xl text-center"
         >
-          <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-cyan-400">
-            Get In Touch
+          <span className="portfolio-eyebrow mx-auto">Contact Me</span>
+
+          <h2 className="text-5xl font-bold leading-tight tracking-tight text-white md:text-7xl">
+            Let&apos;s Build
+            <span className="portfolio-gradient-text"> Something Great</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-cyan-400 mx-auto rounded-full" />
-          <p className="text-xl text-gray-400 mt-6 max-w-2xl mx-auto">
-            I&apos;m always open to discussing new projects, creative ideas, or opportunities.
+
+          <p className="portfolio-muted mt-6 text-lg leading-relaxed md:text-xl">
+            Available for freelance projects, full-time opportunities, startup
+            ideas, or collaborations.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          {contactInfo.map((info, index) => (
+        {/* Cards */}
+        <div className="grid gap-6 md:grid-cols-3">
+          {contactInfo.map((item, index) => (
             <motion.a
               key={index}
-              href={info.href}
-              initial={{ opacity: 0, y: 50 }}
+              href={item.href}
+              target={item.href.startsWith("http") ? "_blank" : undefined}
+              rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              initial={{ opacity: 0, y: 60 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="group relative p-8 rounded-2xl border border-gray-800 hover:border-cyan-500 transition-all duration-300 bg-black/50 text-center"
+              transition={{ duration: 0.7, delay: index * 0.15 }}
+              whileHover={{ y: -8 }}
+              className={`group relative overflow-hidden rounded-3xl border bg-white/[0.03] p-8 backdrop-blur-xl transition-all duration-500 ${item.color}`}
             >
-              <div className="absolute inset-0 rounded-2xl bg-cyan-500 opacity-0 group-hover:opacity-5 blur-xl transition-opacity" />
+              {/* Glow */}
+              <div className="absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+              {/* Border Glow */}
+              <div className="absolute inset-0 rounded-3xl border border-white/5" />
 
               <div className="relative z-10">
-                <div className="inline-block p-4 rounded-full border border-cyan-500 bg-cyan-500/10 mb-4 group-hover:scale-110 transition-transform">
-                  <info.icon className="w-8 h-8 text-cyan-400" />
+                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
+                  <item.icon className="h-7 w-7" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">{info.label}</h3>
-                <p className="text-gray-400">{info.value}</p>
+
+                <h3 className="mb-2 text-2xl font-semibold text-white">
+                  {item.label}
+                </h3>
+
+                <p className="portfolio-muted text-sm leading-relaxed sm:text-base">
+                  {item.value}
+                </p>
+
+                <div className="mt-6 flex items-center gap-2 text-sm font-medium text-white/80 opacity-0 transition-all duration-500 group-hover:translate-x-1 group-hover:opacity-100">
+                  Connect
+                  <ArrowUpRight className="h-4 w-4" />
+                </div>
               </div>
             </motion.a>
           ))}
         </div>
 
-        {/* <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="max-w-2xl mx-auto"
-        >
-          <div className="group relative p-8 md:p-12 rounded-2xl border border-gray-800 hover:border-cyan-500 transition-all duration-300 bg-black/50">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity" />
-
-            <form className="relative z-10 space-y-6">
-              <div>
-                <label className="block text-gray-400 mb-2">Your Name</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 focus:border-cyan-500 focus:outline-none text-white transition-colors"
-                  placeholder="John Doe"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-400 mb-2">Your Email</label>
-                <input
-                  type="email"
-                  className="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 focus:border-cyan-500 focus:outline-none text-white transition-colors"
-                  placeholder="john@example.com"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-400 mb-2">Message</label>
-                <textarea
-                  rows={5}
-                  className="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 focus:border-cyan-500 focus:outline-none text-white transition-colors resize-none"
-                  placeholder="Your message..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="group/btn relative w-full px-8 py-4 rounded-full border border-cyan-500 text-cyan-400 hover:bg-cyan-500/10 transition-all duration-300 flex items-center justify-center gap-2 font-semibold text-lg"
-              >
-                <Send className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
-                <span>Send Message</span>
-                <div className="absolute inset-0 rounded-full bg-cyan-500 opacity-0 group-hover/btn:opacity-20 blur-lg transition-opacity" />
-              </button>
-            </form>
-          </div>
-        </motion.div> */}
-
+        {/* Social */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex justify-center gap-6 mt-12"
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.5 }}
+          className="mt-20 flex flex-col items-center justify-center gap-6"
         >
-          <a
-            href="https://github.com/DaveJay70"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative p-4 rounded-full border border-cyan-500 hover:bg-cyan-500/10 transition-all duration-300"
-          >
-            <Github className="w-6 h-6 text-cyan-400 group-hover:scale-110 transition-transform" />
-            <div className="absolute inset-0 rounded-full bg-cyan-500 opacity-0 group-hover:opacity-20 blur-xl transition-opacity" />
-          </a>
-          <a
-            href="https://linkedin.com/in/jaydave07"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative p-4 rounded-full border border-purple-500 hover:bg-purple-500/10 transition-all duration-300"
-          >
-            <Linkedin className="w-6 h-6 text-purple-400 group-hover:scale-110 transition-transform" />
-            <div className="absolute inset-0 rounded-full bg-purple-500 opacity-0 group-hover:opacity-20 blur-xl transition-opacity" />
-          </a>
+          <p className="text-sm uppercase tracking-[0.25em] text-zinc-500">
+            Find me on
+          </p>
+
+          <div className="flex items-center gap-5">
+            <a
+              href="https://github.com/DaveJay70"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/50"
+            >
+              <Github className="h-6 w-6 text-zinc-400 transition-transform duration-300 group-hover:scale-110 group-hover:text-cyan-400" />
+            </a>
+
+            <a
+              href="https://www.linkedin.com/in/jaydave07"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-violet-400/50"
+            >
+              <Linkedin className="h-6 w-6 text-zinc-400 transition-transform duration-300 group-hover:scale-110 group-hover:text-violet-400" />
+            </a>
+          </div>
         </motion.div>
       </div>
     </section>

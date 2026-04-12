@@ -1,140 +1,174 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { GraduationCap, Calendar, Award, MapPin } from 'lucide-react';
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { GraduationCap, Calendar, Award, MapPin, Sparkles } from "lucide-react";
 
 export default function Education() {
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0.1,
+    threshold: 0.12,
   });
 
   const education = [
     {
-      degree: 'B.TECH in Computer Science and Engineering',
-      institution: 'Darshan University',
-      location: 'Rajkot, Gujarat',
-      period: 'Pursuing',
-      score: 'CGPA: 8.27',
-      gradient: 'from-cyan-500 to-blue-500',
-      accent: 'cyan',
-      icon: '🎓',
+      degree: "B.Tech in Computer Science & Engineering",
+      institution: "Darshan University",
+      location: "Rajkot, Gujarat",
+      period: "Pursuing",
+      score: "CGPA 8.27",
+      icon: "🎓",
+      glow: "from-cyan-500/20 via-cyan-500/5 to-transparent",
+      border: "border-cyan-500/25",
+      text: "text-cyan-400",
     },
     {
-      degree: 'Diploma in Computer Science and Engineering',
-      institution: 'Kalyan Polytechnic',
-      location: 'Jamnagar, Gujarat',
-      period: '2020 – 2023',
-      score: 'CGPA: 9.71',
-      gradient: 'from-purple-500 to-pink-500',
-      accent: 'purple',
-      icon: '📜',
+      degree: "Diploma in Computer Science & Engineering",
+      institution: "Kalyan Polytechnic",
+      location: "Jamnagar, Gujarat",
+      period: "2020 - 2023",
+      score: "CGPA 9.71",
+      icon: "📜",
+      glow: "from-violet-500/20 via-fuchsia-500/10 to-transparent",
+      border: "border-violet-500/25",
+      text: "text-violet-400",
     },
     {
-      degree: 'Secondary School Certificate (10th)',
-      institution: 'Gaurav Vidyalaya',
-      location: 'Jamnagar, Gujarat',
-      period: '2020',
-      score: '68.17%',
-      gradient: 'from-pink-500 to-orange-500',
-      accent: 'pink',
-      icon: '📖',
+      degree: "Secondary School Certificate (10th)",
+      institution: "Gaurav Vidyalaya",
+      location: "Jamnagar, Gujarat",
+      period: "2020",
+      score: "68.17%",
+      icon: "📘",
+      glow: "from-pink-500/20 via-violet-500/10 to-transparent",
+      border: "border-pink-500/25",
+      text: "text-pink-400",
     },
   ];
 
   return (
-    <section id="education" className="py-32 relative" ref={ref}>
-      {/* Background Glows */}
-      <div className="absolute right-[-5%] top-[20%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[120px] -z-10 pointer-events-none" />
-      <div className="absolute left-[10%] bottom-[10%] w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
+    <section
+      id="education"
+      ref={ref}
+      className="relative overflow-hidden py-28 sm:py-32"
+    >
+      {/* Background Effects */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute left-10 top-20 h-72 w-72 rounded-full bg-cyan-500/10 blur-[130px]" />
+        <div className="absolute bottom-10 right-10 h-80 w-80 rounded-full bg-violet-600/10 blur-[140px]" />
+        <div className="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pink-500/8 blur-[160px]" />
+      </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          transition={{ duration: 0.7 }}
+          className="mx-auto mb-24 max-w-3xl text-center"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
-            Academic{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
-              Journey
-            </span>
+          <span className="portfolio-eyebrow mx-auto">
+            <Sparkles className="h-4 w-4 text-violet-300" />
+            Education
+          </span>
+
+          <h2 className="text-5xl font-bold tracking-tight text-white md:text-7xl">
+            My Academic
+            <span className="portfolio-gradient-text"> Journey</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-purple-500 mx-auto rounded-full mb-6" />
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            A strong academic foundation fueling my passion for technology and innovation.
+
+          <p className="portfolio-muted mt-6 text-lg leading-relaxed md:text-xl">
+            Building strong technical foundations through dedication, learning,
+            and consistent growth.
           </p>
         </motion.div>
 
         {/* Timeline */}
         <div className="relative">
-          {/* Vertical line */}
-          <div className="absolute left-6 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-[2px] bg-gradient-to-b from-cyan-500/50 via-purple-500/50 to-pink-500/50" />
+          {/* Center Line */}
+          <div className="absolute left-5 top-0 h-full w-px bg-gradient-to-b from-cyan-500/50 via-violet-500/45 to-pink-500/35 md:left-1/2 md:-translate-x-1/2" />
 
-          <div className="space-y-12 md:space-y-16">
-            {education.map((edu, index) => {
+          <div className="space-y-14 md:space-y-20">
+            {education.map((item, index) => {
               const isLeft = index % 2 === 0;
+
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 40 }}
+                  initial={{ opacity: 0, y: 60 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.7, delay: index * 0.2 }}
-                  className={`relative flex flex-col md:flex-row items-start ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'
-                    }`}
+                  transition={{ duration: 0.7, delay: index * 0.15 }}
+                  className={`relative flex flex-col md:flex-row ${
+                    isLeft ? "md:flex-row" : "md:flex-row-reverse"
+                  }`}
                 >
-                  {/* Timeline dot */}
-                  <div className="absolute left-6 md:left-1/2 -translate-x-1/2 z-20">
-                    <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${edu.gradient} flex items-center justify-center shadow-lg shadow-${edu.accent}-500/30 ring-4 ring-black`}>
-                      <span className="text-lg">{edu.icon}</span>
+                  {/* Timeline Dot */}
+                  <div className="absolute left-5 z-20 -translate-x-1/2 md:left-1/2">
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br ${item.glow} backdrop-blur-xl shadow-xl`}
+                    >
+                      <span className="text-lg">{item.icon}</span>
                     </div>
                   </div>
 
-                  {/* Card */}
+                  {/* Card Side */}
                   <div
-                    className={`ml-16 md:ml-0 md:w-[calc(50%-3rem)] ${isLeft ? 'md:mr-auto md:pr-4' : 'md:ml-auto md:pl-4'
-                      }`}
+                    className={`ml-14 md:ml-0 md:w-[calc(50%-3rem)] ${
+                      isLeft ? "md:mr-auto md:pr-8" : "md:ml-auto md:pl-8"
+                    }`}
                   >
-                    <div className="group relative rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md p-6 md:p-8 hover:border-white/20 transition-all duration-500 overflow-hidden">
-                      {/* Hover gradient overlay */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${edu.gradient} opacity-0 group-hover:opacity-[0.07] transition-opacity duration-500`} />
+                    <motion.div
+                      whileHover={{ y: -6 }}
+                      className={`group relative overflow-hidden rounded-3xl border bg-white/[0.03] p-7 backdrop-blur-xl transition-all duration-500 hover:border-violet-400/25 ${item.border}`}
+                    >
+                      {/* Hover Glow */}
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${item.glow} opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+                      />
 
-                      {/* Top row: period badge */}
-                      <div className="relative z-10 flex items-center gap-2 mb-4">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-${edu.accent}-500/15 text-${edu.accent}-400 border border-${edu.accent}-500/20`}>
-                          <Calendar className="w-3 h-3" />
-                          {edu.period}
-                        </span>
-                      </div>
-
-                      {/* Degree */}
-                      <h3 className="relative z-10 text-xl md:text-2xl font-bold text-white mb-3 leading-snug group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all duration-300">
-                        {edu.degree}
-                      </h3>
-
-                      {/* Institution + Location */}
-                      <div className="relative z-10 space-y-1.5 mb-5">
-                        <div className="flex items-center gap-2 text-gray-300">
-                          <GraduationCap className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                          <span className="font-medium">{edu.institution}</span>
+                      <div className="relative z-10">
+                        {/* Badge */}
+                        <div className="mb-5 flex flex-wrap gap-3">
+                          <span
+                            className={`inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-semibold ${item.text}`}
+                          >
+                            <Calendar className="h-3.5 w-3.5" />
+                            {item.period}
+                          </span>
                         </div>
-                        <div className="flex items-center gap-2 text-gray-500 text-sm">
-                          <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                          <span>{edu.location}</span>
+
+                        {/* Degree */}
+                        <h3 className="text-2xl font-bold leading-snug text-white transition-all duration-300 group-hover:translate-x-1">
+                          {item.degree}
+                        </h3>
+
+                        {/* Institution */}
+                        <div className="mt-5 space-y-2">
+                          <div className="flex items-center gap-2 text-zinc-300">
+                            <GraduationCap className={`h-4 w-4 ${item.text}`} />
+                            <span>{item.institution}</span>
+                          </div>
+
+                          <div className="flex items-center gap-2 text-sm text-zinc-500">
+                            <MapPin className="h-4 w-4" />
+                            <span>{item.location}</span>
+                          </div>
+                        </div>
+
+                        {/* Score */}
+                        <div
+                          className={`mt-6 inline-flex items-center gap-2 rounded-2xl border bg-white/[0.04] px-4 py-2 ${item.border}`}
+                        >
+                          <Award className={`h-4 w-4 ${item.text}`} />
+                          <span className={`text-sm font-semibold ${item.text}`}>
+                            {item.score}
+                          </span>
                         </div>
                       </div>
 
-                      {/* Score badge */}
-                      <div className="relative z-10 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-green-500/10 border border-green-500/20">
-                        <Award className="w-4 h-4 text-green-400" />
-                        <span className="text-green-400 font-bold text-sm tracking-wide">{edu.score}</span>
-                      </div>
-
-                      {/* Decorative corner glow */}
-                      <div className={`absolute -bottom-8 -right-8 w-32 h-32 bg-${edu.accent}-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-${edu.accent}-500/20 transition-colors duration-500`} />
-                    </div>
+                      {/* Corner Glow */}
+                      <div className="absolute -bottom-10 -right-10 h-32 w-32 rounded-full bg-violet-500/10 blur-3xl" />
+                    </motion.div>
                   </div>
                 </motion.div>
               );

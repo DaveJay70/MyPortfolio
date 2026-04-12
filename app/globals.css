@@ -46,7 +46,35 @@
 
   html,
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  /* Full-width fixed navbar: anchors clear header + accent line */
+  section[id] {
+    scroll-margin-top: 5.25rem;
+  }
+}
+
+/* ── Portfolio: shared section chrome (cyan / violet / pink) ── */
+@layer components {
+  .portfolio-eyebrow {
+    @apply mb-4 inline-flex items-center justify-center gap-2 rounded-full border border-violet-500/25 bg-violet-500/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-violet-200/95 sm:mb-5 sm:text-xs;
+  }
+
+  .portfolio-gradient-text {
+    @apply bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-400 bg-clip-text text-transparent;
+  }
+
+  .portfolio-muted {
+    @apply text-zinc-400;
+  }
+
+  .portfolio-divider {
+    @apply flex items-center justify-center gap-3;
+  }
+
+  .portfolio-divider-line {
+    @apply h-px w-14 rounded-full sm:w-16;
   }
 }
 
@@ -54,21 +82,42 @@
 /* GLOBAL BEHAVIOR & UTILITIES   */
 /* ============================= */
 
+/*
+ * Single document scroll: clip horizontal overflow only on <html>.
+ * Putting overflow-x: hidden on body + main each forces overflow-y: auto
+ * on both → two vertical scrollbars in some browsers.
+ */
 html {
   scroll-behavior: smooth;
-  cursor: none; /* custom cursor */
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 body {
-  cursor: none;
-  overflow-x: hidden;
+  overflow-x: unset;
+  overflow-y: unset;
 }
 
-a,
-button,
-input,
-textarea {
-  cursor: none;
+/*
+ * Custom cursor only makes sense for fine pointers (mouse / trackpad).
+ * Hiding the system cursor on touch devices can delay taps / first paint
+ * in some browsers until the user touches the screen.
+ */
+@media (pointer: fine) {
+  html {
+    cursor: none;
+  }
+
+  body {
+    cursor: none;
+  }
+
+  a,
+  button,
+  input,
+  textarea {
+    cursor: none;
+  }
 }
 
 /* Premium Glassmorphism Utility */
@@ -104,4 +153,17 @@ textarea {
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
+}
+
+@keyframes nav-shimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+.animate-nav-shimmer {
+  animation: nav-shimmer 4s linear infinite;
 }
